@@ -1,29 +1,46 @@
-const calculateBalances = (expenses, members) => {
+const calculateBalances = (expenses, members, paidSettlements = []) => {
   const balances = {};
 
   members.forEach((member) => {
     balances[member.memberId] = 0;
   });
 
+  // Calculate balances from expenses
   expenses.forEach((expense) => {
-    balances[expense.paidBy] += Number(expense.amount);
+    if (balances[expense.paidBy] !== undefined) {
+      balances[expense.paidBy] += Number(expense.amount);
+    }
 
     expense.splitBetween.forEach((split) => {
-      balances[split.memberId] -= Number(split.amount);
+      if (balances[split.memberId] !== undefined) {
+        balances[split.memberId] -= Number(split.amount);
+      }
     });
   });
+
+  // Apply already-paid settlements
   paidSettlements.forEach((settlement) => {
     const fromId = settlement.from.memberId;
     const toId = settlement.to.memberId;
     const amount = Number(settlement.amount);
 
-    if(balances[fromId] !== undefined) {
+    // Debtor has paid -> reduce their debt (increase balance towards 0)
+    if (balances[fromId] !== undefined) {
       balances[fromId] += amount;
     }
-    if ( balances[toId] !== undefined) {
+
+    // Creditor has received -> reduce their credit (decrease balance towards 0)
+    if (balances[toId] !== undefined) {
       balances[toId] -= amount;
     }
-  } );
+  });
+
+  // Normalize balances to 2 decimal places (paise) and eliminate -0 or amounts < ₹0.01
+  Object.keys(balances).forEach((memberId) => {
+    const rounded = Math.round(balances[memberId] * 100) / 100;
+    balances[memberId] = Math.abs(rounded) < 0.01 ? 0 : rounded;
+  });
+
   return balances;
 };
 
@@ -32,24 +49,26 @@ const calculateSettlements = (balances, members) => {
   const debtors = [];
 
   members.forEach((member) => {
-    const balance = balances[member.memberId];
+    const balance = balances[member.memberId] || 0;
+    const balanceInPaise = Math.round(balance * 100);
 
-    if (balance > 0.01) {
-      creditors.push({  
+    if (balanceInPaise >= 1) {
+      creditors.push({
         memberId: member.memberId,
         name: member.name,
-        amount: balance,
+        amountInPaise: balanceInPaise,
       });
-    } else if (balance < -0.01) {
-      debtors.push({    
+    } else if (balanceInPaise <= -1) {
+      debtors.push({
         memberId: member.memberId,
         name: member.name,
-        amount: Math.abs(balance),
+        amountInPaise: Math.abs(balanceInPaise),
       });
     }
   });
 
   const settlements = [];
+
   let i = 0;
   let j = 0;
 
@@ -57,34 +76,37 @@ const calculateSettlements = (balances, members) => {
     const debtor = debtors[i];
     const creditor = creditors[j];
 
-    const amount = Math.min(debtor.amount, creditor.amount);
+    const amountInPaise = Math.min(debtor.amountInPaise, creditor.amountInPaise);
 
-    settlements.push({
-      from: {
-        memberId: debtor.memberId,
-        name: debtor.name,
-      },
-      to: {
-        memberId: creditor.memberId,
-        name: creditor.name,
-      },
-      amount: Number(amount.toFixed(2)),
-    });
+    if (amountInPaise >= 1) {
+      settlements.push({
+        from: {
+          memberId: debtor.memberId,
+          name: debtor.name,
+        },
+        to: {
+          memberId: creditor.memberId,
+          name: creditor.name,
+        },
+        amount: Number((amountInPaise / 100).toFixed(2)),
+      });
+    }
 
-    debtor.amount -= amount;
-    creditor.amount -= amount;
+    debtor.amountInPaise -= amountInPaise;
+    creditor.amountInPaise -= amountInPaise;
 
-    if (debtor.amount < 0.01) {
+    if (debtor.amountInPaise < 1) {
       i++;
     }
 
-    if (creditor.amount < 0.01) {
+    if (creditor.amountInPaise < 1) {
       j++;
     }
   }
 
   return settlements;
 };
+
 module.exports = {
   calculateBalances,
   calculateSettlements,

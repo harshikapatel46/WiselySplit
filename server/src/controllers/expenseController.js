@@ -4,6 +4,7 @@ const {
   calculateBalances,
   calculateSettlements,
 } = require("../services/settlementService");
+
 const Settlement = require("../models/Settlement");
 
 const createEqualSplit = (amount, members) => {
@@ -29,9 +30,16 @@ const createExpense = async (req, res) => {
       splitBetween: requestedSplit,
     } = req.body;
 
-    if (!description || !amount || !currency || !paidBy) {
+    if (!description || amount === undefined || amount === null || !currency || !paidBy) {
       return res.status(400).json({
         message: "All fields are required",
+      });
+    }
+
+    const parsedAmount = Number(amount);
+    if (!Number.isFinite(parsedAmount) || Math.round(parsedAmount * 100) < 1) {
+      return res.status(400).json({
+        message: "Expense amount must be at least ₹0.01",
       });
     }
 
@@ -142,13 +150,18 @@ const getBalances = async (req, res) => {
 
     const paidSettlements = await Settlement.find({ roomCode, status: "PAID" });
 
-    const balances = calculateBalances(expenses, room.members,paidSettlements);
+    const balances = calculateBalances(expenses, room.members, paidSettlements);
 
-    const result = room.members.map((member) => ({
-      memberId: member.memberId,
-      name: member.name,
-      balance: Number(balances[member.memberId].toFixed(2)),
-    }));
+    const result = room.members.map((member) => {
+      const rawBalance = balances[member.memberId] || 0;
+      const rounded = Math.round(rawBalance * 100) / 100;
+      const normalized = Math.abs(rounded) < 0.01 ? 0 : rounded;
+      return {
+        memberId: member.memberId,
+        name: member.name,
+        balance: normalized,
+      };
+    });
 
     res.status(200).json(result);
   } catch (error) {
@@ -190,46 +203,63 @@ const getSettlements = async (req, res) => {
   }
 };
 const markSettlementsAsPaid = async (req, res) => {
-    try {
-      const { roomCode } = req.params;
-      const { from , to ,amount } = req.body ;
+  try {
+    const { roomCode } = req.params;
+    const { from, to, amount } = req.body;
 
-      if ( 
-        !from?.memberId || !to?.memberId || !Number.isFinite(amount) || Number(amount) <= 0
-      ) {   
+    const parsedAmount = Number(amount);
+    if (
+      !from?.memberId ||
+      !to?.memberId ||
+      !Number.isFinite(parsedAmount) ||
+      Math.round(parsedAmount * 100) < 1
+    ) {
       return res.status(400).json({
-        message: "Valid settlement details are required.",
+        message: "Valid settlement details with an amount of at least ₹0.01 are required.",
       });
     }
-  const room = await Room.findOne({ roomCode });
 
-      if (!room) {
-        return res.status(404).json({
-          message: "Room not found",
-        });
-      }
-      const memberIds = new Set( room .members.map((member) => member.memberId) );
-      if (!memberIds.has(from.memberId) || !memberIds.has(to.memberId)) {
-        return res.status(400).json({
-          message: "Both members must be part of the room.",
-        });
-      } const settlement = await Settlement.create({
+    if (from.memberId === to.memberId) {
+      return res.status(400).json({
+        message: "Cannot settle with yourself.",
+      });
+    }
+
+    const room = await Room.findOne({ roomCode });
+
+    if (!room) {
+      return res.status(404).json({
+        message: "Room not found",
+      });
+    }
+
+    const fromMember = room.members.find((m) => m.memberId === from.memberId);
+    const toMember = room.members.find((m) => m.memberId === to.memberId);
+
+    if (!fromMember || !toMember) {
+      return res.status(400).json({
+        message: "Both members must be part of the room.",
+      });
+    }
+
+    const settlement = await Settlement.create({
       roomCode,
       from: {
-        memberId: from.memberId,
-        name: from.name,
+        memberId: fromMember.memberId,
+        name: fromMember.name,
       },
       to: {
-        memberId: to.memberId,
-        name: to.name,
+        memberId: toMember.memberId,
+        name: toMember.name,
       },
-      amount: Number(Number(amount).toFixed(2)),
+      amount: Number((Math.round(parsedAmount * 100) / 100).toFixed(2)),
       status: "PAID",
     });
 
     const io = req.app.get("io");
-
-    io.to(roomCode).emit("settlement:paid", settlement);
+    if (io) {
+      io.to(roomCode).emit("settlement:paid", settlement);
+    }
 
     res.status(201).json(settlement);
   } catch (error) {
@@ -240,10 +270,36 @@ const markSettlementsAsPaid = async (req, res) => {
     });
   }
 };
+
+const getSettlementHistory = async (req, res) => {
+  try {
+    const { roomCode } = req.params;
+
+    const room = await Room.findOne({ roomCode });
+    if (!room) {
+      return res.status(404).json({
+        message: "Room not found",
+      });
+    }
+
+    const history = await Settlement.find({ roomCode, status: "PAID" }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(history);
+  } catch (error) {
+    console.error("GET SETTLEMENT HISTORY ERROR:", error);
+    res.status(500).json({
+      message: "Failed to fetch settlement history",
+    });
+  }
+};
+
 module.exports = {
   createExpense,
   getExpenses,
   getBalances,
   getSettlements,
   markSettlementsAsPaid,
+  getSettlementHistory,
 };

@@ -1,8 +1,11 @@
-export const formatINR = (value) =>
-  `₹${Number(value || 0).toLocaleString("en-IN", {
+export const formatINR = (value) => {
+  const num = Number(value || 0);
+  const normalized = Math.abs(num) < 0.01 ? 0 : num;
+  return `₹${normalized.toLocaleString("en-IN", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
+};
 
 export const settlementKey = ({ from, to, amount }) =>
   `${from.memberId}-${to.memberId}-${amount}`;
