@@ -181,7 +181,7 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
         </div>
       )}
       <div className="w-full max-w-lg rounded-3xl border-4 border-black bg-[#fffaf0] p-6 shadow-[9px_9px_0_#ff83d8] sm:p-8">
-        {/* Header */}
+        
         <div className="flex items-start justify-between">
           <div>
             <span className="rounded-full border-2 border-black bg-[#ffd34e] px-3 py-1 text-xs font-black uppercase">
@@ -207,7 +207,7 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
         </div>
 
         <form onSubmit={handleSubmit} className="mt-7 space-y-5">
-          {/* Description */}
+          
           <div>
             <label
               htmlFor="expense-description"
@@ -227,7 +227,7 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
             />
           </div>
 
-          {/* Amount */}
+       
           <div>
             <label
               htmlFor="expense-amount"
@@ -255,7 +255,7 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
             </div>
           </div>
 
-          {/* Who Paid */}
+         
           <div>
             <label
               htmlFor="expense-payer"
@@ -281,7 +281,7 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
             </select>
           </div>
 
-          {/* Split Type */}
+        
           <div>
             <label
               htmlFor="split-type"
@@ -344,7 +344,7 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
             </div>
           )}
 
-          {/* Percentage split */}
+      
           {splitType === "PERCENTAGE" && (
             <div className="rounded-2xl border-[3px] border-black bg-[#ff83d8] p-4">
               <p className="mb-3 text-xs font-black uppercase tracking-wider">
@@ -361,7 +361,7 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
             </div>
           )}
 
-          {/* Shares split */}
+         
           {splitType === "SHARES" && (
             <div className="rounded-2xl border-[3px] border-black bg-[#8df5b0] p-4">
               <p className="mb-3 text-xs font-black uppercase tracking-wider">
@@ -378,7 +378,6 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
             </div>
           )}
 
-          {/* Split Summary */}
           <div className="rounded-2xl border-[3px] border-black bg-[#f8f1e7] p-4">
             <div className="flex justify-between font-bold">
               <span>Split</span>
@@ -400,7 +399,7 @@ export default function AddExpenseModal({ roomCode, members, onClose, onAdd }) {
             </div>
           </div>
 
-          {/* Submit */}
+          
           <button
             type="submit"
             disabled={submitting}
