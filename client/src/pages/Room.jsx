@@ -98,12 +98,13 @@ export default function Room() {
           disabled={!isOnline}
         />
         <Balances balances={balances} />
-        <Settlements settlements={settlements} onMarkPaid={paySettlement} />
         <Expenses
           expenses={expenses}
           members={room.members || []}
           onAdd={() => setShowExpenseForm(true)}
         />
+        <Settlements settlements={settlements} onMarkPaid={paySettlement} />
+        
       </main>
       <RoomNav roomCode={roomCode} active="room" />
       {showExpenseForm && (
