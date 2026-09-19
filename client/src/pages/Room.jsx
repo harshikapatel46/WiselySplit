@@ -7,8 +7,7 @@ import Header from "../components/room/Header";
 import Members from "../components/room/Members";
 import Settlements from "../components/room/Settlements";
 import useRoomData from "../hooks/useRoomData";
-import AIInsights from "../components/room/AIInsights";
-import SettlementHistory from "../components/room/SettlementHistory";
+import RoomNav from "../components/room/RoomNav";
 
 export default function Room() {
   const { roomCode } = useParams();
@@ -76,7 +75,7 @@ export default function Room() {
   return (
     <div className="fintech-theme min-h-screen">
       <Header room={room} isOnline={isOnline} />
-      <main className="mx-auto max-w-6xl px-5 py-8 sm:px-8">
+      <main className="mx-auto max-w-6xl px-5 py-8 pb-28 sm:px-8">
         {error && (
           <div
             role="alert"
@@ -99,15 +98,14 @@ export default function Room() {
           disabled={!isOnline}
         />
         <Balances balances={balances} />
-        <AIInsights roomCode={roomCode} />
         <Settlements settlements={settlements} onMarkPaid={paySettlement} />
-        <SettlementHistory roomCode={roomCode} />
         <Expenses
           expenses={expenses}
           members={room.members || []}
           onAdd={() => setShowExpenseForm(true)}
         />
       </main>
+      <RoomNav roomCode={roomCode} active="room" />
       {showExpenseForm && (
         <AddExpenseModal
           roomCode={roomCode}

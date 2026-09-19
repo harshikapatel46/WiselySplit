@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getExpenseInsights } from "../../services/roomApi";
 
-export default function AIInsights({ roomCode }) {
+export default function AIInsights({ roomCode, className = "" }) {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -22,7 +22,7 @@ export default function AIInsights({ roomCode }) {
   };
 
   return (
-    <section className="mt-10">
+    <section className={className || "mt-6"}>
       <div className="mb-5">
         <span className="text-xs font-black uppercase tracking-widest text-black/50">
           Smart analysis
@@ -68,9 +68,7 @@ export default function AIInsights({ roomCode }) {
             <p className="text-xs font-black uppercase tracking-widest text-black/50">
               Top category
             </p>
-            <p className="mt-2 text-2xl font-black">
-              {insights.topCategory}
-            </p>
+            <p className="mt-2 text-2xl font-black">{insights.topCategory}</p>
           </div>
 
           <div className="rounded-2xl border-4 border-black bg-[#ffd34e] p-5 shadow-[5px_5px_0_#171717]">
@@ -84,9 +82,7 @@ export default function AIInsights({ roomCode }) {
             <p className="text-xs font-black uppercase tracking-widest text-black/50">
               Suggestion
             </p>
-            <p className="mt-2 text-lg font-black">
-              {insights.suggestion}
-            </p>
+            <p className="mt-2 text-lg font-black">{insights.suggestion}</p>
           </div>
         </div>
       )}

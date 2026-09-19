@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { formatINR } from "../../utils/room";
 import { getSettlementHistory } from "../../services/roomApi";
+import socket from "../../services/socket";
 
-export default function SettlementHistory({ roomCode }) {
+export default function SettlementHistory({ roomCode, className = "" }) {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,10 +20,19 @@ export default function SettlementHistory({ roomCode }) {
     }
 
     loadHistory();
+
+    const handleSettlementPaid = () => {
+      loadHistory();
+    };
+
+    socket.on("settlement:paid", handleSettlementPaid);
+    return () => {
+      socket.off("settlement:paid", handleSettlementPaid);
+    };
   }, [roomCode]);
 
   return (
-    <section className="mt-10">
+    <section className={className || "mt-6"}>
       <div className="mb-5">
         <span className="text-xs font-black uppercase tracking-widest text-black/50">
           Completed payments

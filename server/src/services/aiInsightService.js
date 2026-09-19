@@ -59,7 +59,6 @@ Keep each field concise.
 
   return JSON.parse(response.text);
 
-  return JSON.parse(response.text);
 };
 
 module.exports = {
