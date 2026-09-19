@@ -29,3 +29,4 @@ node_modules/
 dist/
 dev-dist/
 node_modules/
+wiselySplit/server/node_modules
