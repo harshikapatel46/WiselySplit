@@ -37,6 +37,8 @@ export const createExpense = (roomCode, expense) =>
 
 export const markSettlementAsPaid = (roomCode, settlement) =>
   api.post(`/expenses/${roomCode}/settlements/pay`, settlement);
-
+export const getExpenseInsights = (roomCode) =>
+  api.get(`/expenses/${roomCode}/insights`);
 export const getSettlementHistory = (roomCode) =>
   api.get(`/expenses/${roomCode}/settlements/history`);
+

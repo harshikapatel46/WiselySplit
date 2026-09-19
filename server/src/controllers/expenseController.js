@@ -6,7 +6,7 @@ const {
 } = require("../services/settlementService");
 
 const Settlement = require("../models/Settlement");
-
+const { generateExpenseInsights } = require("../services/aiInsightService");
 const createEqualSplit = (amount, members) => {
   const amountInPaise = Math.round(Number(amount) * 100);
   const baseShare = Math.floor(amountInPaise / members.length);
@@ -30,7 +30,13 @@ const createExpense = async (req, res) => {
       splitBetween: requestedSplit,
     } = req.body;
 
-    if (!description || amount === undefined || amount === null || !currency || !paidBy) {
+    if (
+      !description ||
+      amount === undefined ||
+      amount === null ||
+      !currency ||
+      !paidBy
+    ) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -67,7 +73,9 @@ const createExpense = async (req, res) => {
       }
 
       const memberIds = new Set(room.members.map((member) => member.memberId));
-      const requestedIds = new Set(requestedSplit.map((split) => split.memberId));
+      const requestedIds = new Set(
+        requestedSplit.map((split) => split.memberId),
+      );
       const splitTotal = requestedSplit.reduce(
         (sum, split) => sum + Number(split.amount),
         0,
@@ -85,7 +93,8 @@ const createExpense = async (req, res) => {
 
       if (!isValidSplit) {
         return res.status(400).json({
-          message: "Split amounts must cover every member and equal the expense total.",
+          message:
+            "Split amounts must cover every member and equal the expense total.",
         });
       }
 
@@ -107,7 +116,7 @@ const createExpense = async (req, res) => {
     const io = req.app.get("io");
 
     io.to(roomCode).emit("expense:created", expense);
-    
+
     console.log(`Expense created in room ${roomCode}:`, expense);
     res.status(201).json(expense);
   } catch (error) {
@@ -186,11 +195,11 @@ const getSettlements = async (req, res) => {
     }
 
     const expenses = await Expense.find({ roomCode });
-   
+
     const paidSettlements = await Settlement.find({ roomCode, status: "PAID" });
 
-    const balances = calculateBalances(expenses, room.members, paidSettlements);  
-   
+    const balances = calculateBalances(expenses, room.members, paidSettlements);
+
     const settlements = calculateSettlements(balances, room.members);
 
     res.status(200).json(settlements);
@@ -215,7 +224,8 @@ const markSettlementsAsPaid = async (req, res) => {
       Math.round(parsedAmount * 100) < 1
     ) {
       return res.status(400).json({
-        message: "Valid settlement details with an amount of at least ₹0.01 are required.",
+        message:
+          "Valid settlement details with an amount of at least ₹0.01 are required.",
       });
     }
 
@@ -294,7 +304,43 @@ const getSettlementHistory = async (req, res) => {
     });
   }
 };
+const getExpenseInsights = async (req, res) => {
+  try {
+    const { roomCode } = req.params;
 
+    const room = await Room.findOne({ roomCode });
+
+    if (!room) {
+      return res.status(404).json({
+        message: "Room not found",
+      });
+    }
+
+    const expenses = await Expense.find({ roomCode }).sort({
+      createdAt: -1,
+    });
+
+    if (expenses.length === 0) {
+      return res.status(200).json({
+        summary: "No expenses yet.",
+        topCategory: "None",
+        observation: "Add some expenses to generate spending insights.",
+        suggestion: "Start by adding your first shared expense.",
+      });
+    }
+
+    const insights = await generateExpenseInsights(expenses);
+
+    res.status(200).json(insights);
+  } catch (error) {
+    console.error("INSIGHT ERROR:", error);
+
+    res.status(500).json({
+      message: "Failed to generate expense insights",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createExpense,
   getExpenses,
@@ -302,4 +348,5 @@ module.exports = {
   getSettlements,
   markSettlementsAsPaid,
   getSettlementHistory,
+   getExpenseInsights,
 };

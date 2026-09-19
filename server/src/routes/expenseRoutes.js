@@ -7,6 +7,7 @@ const {
   getSettlements,
   markSettlementsAsPaid,
   getSettlementHistory,
+  getExpenseInsights,
 } = require("../controllers/expenseController");
 
 const router = express.Router();
@@ -20,6 +21,7 @@ router.get("/:roomCode/settlements/history", getSettlementHistory);
 router.get("/:roomCode/settlements", getSettlements);
  
 router.post("/:roomCode/settlements/pay", markSettlementsAsPaid);
+router.get("/:roomCode/insights", getExpenseInsights);
 router.get("/:roomCode", getExpenses);
 
 module.exports = router;

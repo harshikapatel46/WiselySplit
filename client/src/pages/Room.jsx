@@ -7,6 +7,8 @@ import Header from "../components/room/Header";
 import Members from "../components/room/Members";
 import Settlements from "../components/room/Settlements";
 import useRoomData from "../hooks/useRoomData";
+import AIInsights from "../components/room/AIInsights";
+import SettlementHistory from "../components/room/SettlementHistory";
 
 export default function Room() {
   const { roomCode } = useParams();
@@ -97,8 +99,9 @@ export default function Room() {
           disabled={!isOnline}
         />
         <Balances balances={balances} />
-        <Settlements 
-        settlements={settlements} onMarkPaid={paySettlement} />
+        <AIInsights roomCode={roomCode} />
+        <Settlements settlements={settlements} onMarkPaid={paySettlement} />
+        <SettlementHistory roomCode={roomCode} />
         <Expenses
           expenses={expenses}
           members={room.members || []}
