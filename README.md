@@ -72,10 +72,3 @@ WiselySplit is designed for easy expense sharing among groups:
 -   **Friends Dinners/Outings:** Easily split the bill for meals and events.
 -   **Shared Subscriptions:** Track contributions towards common subscriptions.
 
-## License 📄
-
-This project does not specify a license. Use at your own discretion.
-it.svg)](https://github.com/harshikapatel46/WiselySplit/issues)
-
-
-
