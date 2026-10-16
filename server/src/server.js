@@ -9,15 +9,16 @@ const connectDB = require("./config/db");
 connectDB();
 
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: "https://wisely-split-weld.vercel.app",
+    origin: ["https://wisely-split-weld.vercel.app", "http://localhost:5173"],
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
-app.set("io", io);
 
+app.set("io", io);
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
