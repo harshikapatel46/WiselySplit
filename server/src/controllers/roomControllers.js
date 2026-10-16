@@ -31,36 +31,48 @@ const joinRoom = async (req, res) => {
     const { roomCode } = req.params;
     const { name } = req.body;
 
-    if (!name) {
+    const trimmedName = (name || "").trim();
+    if (!trimmedName) {
       return res.status(400).json({
         message: "Member name is required",
       });
     }
-    const room = await Room.findOne({ roomCode });
+
+    const normalizedRoomCode = (roomCode || "").trim().toUpperCase();
+    const room = await Room.findOne({ roomCode: normalizedRoomCode });
 
     if (!room) {
       return res.status(404).json({
         message: "Room not found",
       });
     }
+
+    const existingMember = room.members.find(
+      (m) => m.name.toLowerCase() === trimmedName.toLowerCase()
+    );
+
+    if (existingMember) {
+      return res.status(400).json({
+        message: "A member with this name is already in the room",
+      });
+    }
+
     const member = {
       memberId: crypto.randomUUID(),
-      name: name.trim(),
+      name: trimmedName,
     };
 
     room.members.push(member);
     await room.save();
 
-    
     const io = req.app.get("io");
-    console.log("Member joined:", roomCode, member);
-
-    io.to(roomCode).emit("member:joined", {
-      memberId: member.memberId,
-      name: member.name,
-    });
-
- 
+    if (io) {
+      console.log("Member joined:", normalizedRoomCode, member);
+      io.to(normalizedRoomCode).emit("member:joined", {
+        memberId: member.memberId,
+        name: member.name,
+      });
+    }
 
     res.status(200).json({
       message: "Joined room successfully",
@@ -78,8 +90,9 @@ const joinRoom = async (req, res) => {
 const getRoom = async (req, res) => {
   try {
     const { roomCode } = req.params;
+    const normalizedRoomCode = (roomCode || "").trim().toUpperCase();
 
-    const room = await Room.findOne({ roomCode });
+    const room = await Room.findOne({ roomCode: normalizedRoomCode });
 
     if (!room) {
       return res.status(404).json({
