@@ -155,7 +155,8 @@ function LandingSection({ step }) {
 export default function Home() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const codeFromQuery = searchParams.get("join") || searchParams.get("code") || "";
+  const codeFromQuery =
+    searchParams.get("join") || searchParams.get("code") || "";
   const [isJoinOpen, setIsJoinOpen] = useState(() => Boolean(codeFromQuery));
   const [initialRoomCode, setInitialRoomCode] = useState(() =>
     codeFromQuery.toUpperCase(),
@@ -178,7 +179,7 @@ export default function Home() {
               setInitialRoomCode("");
               setIsJoinOpen(true);
             }}
-            className="landing-nav__cta border border-[#e5ded0] bg-white !text-[#2c2d28] shadow-sm hover:bg-[#fffaf0]"
+            className="landing-nav__sub"
           >
             Join room
           </button>
@@ -206,7 +207,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => navigate("/create")}
-              className="landing-primary-cta !mt-0"
+              className="landing-primary-cta mt-0!"
             >
               Create your split <span>→</span>
             </button>
@@ -260,7 +261,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate("/create")}
-            className="landing-primary-cta !mt-0"
+            className="landing-primary-cta mt-0!"
           >
             Create your split <span>→</span>
           </button>
@@ -277,11 +278,13 @@ export default function Home() {
         </div>
         <p>No account needed · Free for your group</p>
       </section>
-      <JoinRoomModal
-        isOpen={isJoinOpen}
-        onClose={() => setIsJoinOpen(false)}
-        initialRoomCode={initialRoomCode}
-      />
+      {isJoinOpen && (
+        <JoinRoomModal
+          isOpen={isJoinOpen}
+          onClose={() => setIsJoinOpen(false)}
+          initialRoomCode={initialRoomCode}
+        />
+      )}
     </main>
   );
 }

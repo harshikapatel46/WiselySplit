@@ -91,6 +91,9 @@ export default function JoinRoomModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="join-room-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
       <div className="w-full max-w-md rounded-3xl border-4 border-black bg-[#fffaf0] p-6 shadow-[9px_9px_0_#ffd34e] sm:p-8">
         <div className="flex items-start justify-between">
