@@ -134,8 +134,6 @@ WiselySplit/
         └── services/      # Business logic and integrations
 ```
  
-## License 📄
- 
-Add a `LICENSE` file and name it here (e.g. MIT).
+
  
 ---
