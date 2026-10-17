@@ -1,10 +1,23 @@
 # WiselySplit 💸
 
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow?logo=javascript&style=flat-square)
+![React](https://img.shields.io/badge/React-18.x-blue?logo=react&style=flat-square)
+![Express](https://img.shields.io/badge/Express-4.x-black?logo=express&style=flat-square)
+![MongoDB](https://img.shields.io/badge/MongoDB-green?logo=mongodb&style=flat-square)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.x-teal?logo=tailwindcss&style=flat-square)
+[![Socket.IO](https://img.shields.io/badge/Socket.IO-Real--time-black?logo=socket.io&logoColor=white&style=flat-square)](https://socket.io/)
+
 A modern, offline-first expense splitting application built with React, Node.js, and Socket.IO.
+
 
 ## Description 📝
 
 WiselySplit is a React-based web application that simplifies the process of splitting expenses among friends or group members. It offers an intuitive interface for creating shared rooms, adding expenses, and tracking who owes whom. A key feature is its offline-first capability, ensuring users can add expenses even without an internet connection, with automatic synchronization once connectivity is restored.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/42821e7c-19cc-4386-9c1e-2286b478e21e" width="49%" alt="WiselySplit Screenshot 1" />
+  <img src="https://github.com/user-attachments/assets/caedd610-5fd5-474e-aa12-03ea621dd7cb" width="49%" alt="WiselySplit Screenshot 2" />
+</p>
 
 ## Table of Contents 📜
 
@@ -64,6 +77,45 @@ WiselySplit is designed for easy expense sharing among groups:
 5.  **Settle Up:** Mark settlements as paid to keep the room's balance accurate.
 6.  **Offline Use:** Add expenses even without an internet connection. The app will sync them when you're back online.
 7.  **View History & Insights:** Explore past transactions and gain insights into spending patterns within the room.
+## Project Structure
+
+```text
+WiselySplit/
+├── .gitignore
+├── README.md
+├── client/
+│   ├── README.md
+│   ├── dev-dist/
+│   │   ├── registerSW.js
+│   │   ├── sw.js
+│   │   └── workbox-7e5eb42b.js
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src/
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── components/    # Reusable React components
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── pages/         # Page-level React components
+│   │   ├── services/      # API and utility services
+│   │   └── utils/         # Utility functions
+│   └── vite.config.js
+└── server/
+    ├── package-lock.json
+    ├── package.json
+    └── src/
+        ├── app.js
+        ├── config/        # Environment and DB configuration
+        ├── controllers/   # REST API controllers
+        ├── models/        # Mongoose models
+        ├── routes/        # API route definitions
+        ├── server.js      # Express server entry point
+        └── services/      # Business logic and integrations
+```
 
 **Real-world Use Cases:**
 
