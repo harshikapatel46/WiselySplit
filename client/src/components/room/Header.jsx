@@ -1,4 +1,33 @@
+import { useState } from "react";
+
 export default function Header({ room, isOnline }) {
+  const [copiedType, setCopiedType] = useState("");
+
+  const handleCopyCode = async () => {
+    try {
+      if (room?.roomCode) {
+        await navigator.clipboard.writeText(room.roomCode);
+        setCopiedType("code");
+        setTimeout(() => setCopiedType(""), 2000);
+      }
+    } catch {
+      // fallback
+    }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      if (room?.roomCode) {
+        const shareUrl = `${window.location.origin}/room/${room.roomCode}`;
+        await navigator.clipboard.writeText(shareUrl);
+        setCopiedType("link");
+        setTimeout(() => setCopiedType(""), 2000);
+      }
+    } catch {
+      // fallback
+    }
+  };
+
   return (
     <header>
       <div className="mx-auto max-w-6xl px-5 py-6 sm:px-8">
@@ -23,12 +52,31 @@ export default function Header({ room, isOnline }) {
             <h1 className="mt-1 text-4xl font-black leading-none sm:text-5xl">
               {room.name}
             </h1>
-            <p className="mt-3 text-sm font-semibold text-black/55">
-              Room code{" "}
-              <span className="ml-1 rounded-full bg-[#fffdf8] px-3 py-1 text-[#2c2d28]">
-                {room.roomCode}
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="text-sm font-semibold text-black/55">
+                Room code
               </span>
-            </p>
+              <button
+                type="button"
+                onClick={handleCopyCode}
+                title="Click to copy room code"
+                className="inline-flex items-center gap-1.5 rounded-full border-2 border-black bg-[#fffdf8] px-3 py-1 text-sm font-black text-[#2c2d28] shadow-[2px_2px_0_#171717] transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+              >
+                {room.roomCode}
+                <span className="text-xs text-black/50">⎘</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className="inline-flex items-center gap-1 rounded-full border-2 border-black bg-[#ffd34e] px-3 py-1 text-xs font-black text-[#2c2d28] shadow-[2px_2px_0_#171717] transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+              >
+                {copiedType === "link"
+                  ? "Link copied! ✓"
+                  : copiedType === "code"
+                    ? "Code copied! ✓"
+                    : "Share room ↗"}
+              </button>
+            </div>
           </div>
           <div className="rounded-full bg-[#f6d766] px-4 py-3 text-sm font-black">
             ₹ INR

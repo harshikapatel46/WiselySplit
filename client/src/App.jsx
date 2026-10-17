@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import CreateRoom from "./pages/CreateRoom";
+import JoinRoom from "./pages/JoinRoom";
 import Room from "./pages/Room";
 import RoomHistory from "./pages/RoomHistory";
 import RoomInsights from "./pages/RoomInsights";
@@ -12,6 +13,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateRoom />} />
+        <Route path="/join" element={<JoinRoom />} />
+        <Route path="/join/:roomCode" element={<JoinRoom />} />
         <Route path="/room/:roomCode" element={<Room />} />
         <Route path="/room/:roomCode/history" element={<RoomHistory />} />
         <Route path="/room/:roomCode/insights" element={<RoomInsights />} />

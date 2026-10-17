@@ -31,8 +31,8 @@ export default function Room() {
     try {
       setError("");
       await addMember(name);
-    } catch {
-      setError("Failed to join room.");
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to join room.");
     }
   }
   async function handleAdd(expense) {

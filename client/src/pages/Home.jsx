@@ -1,4 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import JoinRoomModal from "../components/room/JoinRoomModal";
 
 const steps = [
   {
@@ -152,6 +154,13 @@ function LandingSection({ step }) {
 
 export default function Home() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const codeFromQuery = searchParams.get("join") || searchParams.get("code") || "";
+  const [isJoinOpen, setIsJoinOpen] = useState(() => Boolean(codeFromQuery));
+  const [initialRoomCode, setInitialRoomCode] = useState(() =>
+    codeFromQuery.toUpperCase(),
+  );
+
   return (
     <main className="landing-page">
       <nav className="landing-nav">
@@ -162,13 +171,25 @@ export default function Home() {
         >
           <span>₹</span>wiselySplit
         </button>
-        <button
-          type="button"
-          onClick={() => navigate("/create")}
-          className="landing-nav__cta"
-        >
-          Create room
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setInitialRoomCode("");
+              setIsJoinOpen(true);
+            }}
+            className="landing-nav__cta border border-[#e5ded0] bg-white !text-[#2c2d28] shadow-sm hover:bg-[#fffaf0]"
+          >
+            Join room
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/create")}
+            className="landing-nav__cta"
+          >
+            Create room
+          </button>
+        </div>
       </nav>
       <section className="landing-hero">
         <div className="landing-hero__content">
@@ -181,13 +202,25 @@ export default function Home() {
           <p>
             One calm place for every shared bill, every person, and every plan.
           </p>
-          <button
-            type="button"
-            onClick={() => navigate("/create")}
-            className="landing-primary-cta"
-          >
-            Create your split <span>→</span>
-          </button>
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => navigate("/create")}
+              className="landing-primary-cta !mt-0"
+            >
+              Create your split <span>→</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setInitialRoomCode("");
+                setIsJoinOpen(true);
+              }}
+              className="inline-flex items-center gap-2 rounded-full border-2 border-black bg-[#ffd34e] px-6 py-3.5 text-base font-black text-[#2c2d28] shadow-[3px_3px_0_#171717] transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+            >
+              Join a room
+            </button>
+          </div>
           <div className="landing-trust">
             <span>✦</span> No accounts. Just share a room link.
           </div>
@@ -223,15 +256,32 @@ export default function Home() {
           <br />
           <em>We’ll handle the split.</em>
         </h2>
-        <button
-          type="button"
-          onClick={() => navigate("/create")}
-          className="landing-primary-cta"
-        >
-          Create your split <span>→</span>
-        </button>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => navigate("/create")}
+            className="landing-primary-cta !mt-0"
+          >
+            Create your split <span>→</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setInitialRoomCode("");
+              setIsJoinOpen(true);
+            }}
+            className="inline-flex items-center gap-2 rounded-full border-2 border-black bg-[#ffd34e] px-6 py-3.5 text-base font-black text-[#2c2d28] shadow-[3px_3px_0_#fffdf8] transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+          >
+            Join a room
+          </button>
+        </div>
         <p>No account needed · Free for your group</p>
       </section>
+      <JoinRoomModal
+        isOpen={isJoinOpen}
+        onClose={() => setIsJoinOpen(false)}
+        initialRoomCode={initialRoomCode}
+      />
     </main>
   );
 }
