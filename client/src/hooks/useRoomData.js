@@ -147,7 +147,7 @@ export default function useRoomData(roomCode) {
           setData((current) => ({
             ...current,
             expenses: current.expenses.filter(
-              (item) => item.localId !== localId,
+              (item) => item.localId !== localId && item._id !== localId,
             ),
           }));
 
@@ -156,6 +156,21 @@ export default function useRoomData(roomCode) {
           addExpenseToState(response.data);
         } catch (syncError) {
           console.error("Failed to sync expense:", syncError);
+          if (
+            syncError.response &&
+            syncError.response.status >= 400 &&
+            syncError.response.status < 500
+          ) {
+            await deletePendingExpense(localId);
+            setData((current) => ({
+              ...current,
+              expenses: current.expenses.filter(
+                (item) => item.localId !== localId && item._id !== localId,
+              ),
+            }));
+            expenseIds.current.delete(localId);
+            continue;
+          }
           return;
         }
       }
@@ -275,10 +290,14 @@ export default function useRoomData(roomCode) {
 
         console.log("Expense API failed. Saving offline...");
 
-        const localId = await savePendingExpense(roomCode, expense);
+        const localId = await savePendingExpense({
+          ...expense,
+          roomCode,
+        });
 
         addExpenseToState({
           ...expense,
+          roomCode,
           _id: localId,
           localId,
           status: "pending",

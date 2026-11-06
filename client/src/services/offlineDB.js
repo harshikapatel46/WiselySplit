@@ -16,13 +16,32 @@ const dbPromise = openDB("wiselySplit-db", 2, {
   },
 });
 
-export async function savePendingExpense(expense) {
-  const localId = crypto.randomUUID();
+export async function savePendingExpense(expenseOrRoomCode, maybeExpense) {
+  let expenseData;
+  if (
+    typeof expenseOrRoomCode === "string" &&
+    typeof maybeExpense === "object" &&
+    maybeExpense !== null
+  ) {
+    expenseData = { ...maybeExpense, roomCode: expenseOrRoomCode };
+  } else if (
+    typeof expenseOrRoomCode === "object" &&
+    expenseOrRoomCode !== null
+  ) {
+    expenseData = { ...expenseOrRoomCode };
+    if (typeof maybeExpense === "string") {
+      expenseData.roomCode = maybeExpense;
+    }
+  } else {
+    expenseData = {};
+  }
+
+  const localId = expenseData.localId || crypto.randomUUID();
 
   const db = await dbPromise;
 
   await db.put("pendingExpenses", {
-    ...expense,
+    ...expenseData,
     localId,
     createdOffline: true,
     status: "pending",
