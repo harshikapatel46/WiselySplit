@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Room Metadata",
+    "endpoint": "/api/rooms/AUDIT_BENCHMARK_ROOM",
+    "description": "Fetches room document and member list (Room.findOne)",
+    "totalRequests": 36200,
+    "requestsPerSec": 1810,
+    "avgLatencyMs": 27.12,
+    "p50LatencyMs": 26,
+    "p95LatencyMs": 40,
+    "p99LatencyMs": 44,
+    "minLatencyMs": 17,
+    "maxLatencyMs": 172,
+    "failedRequests": 0,
+    "errorRatePercent": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 36200
+      }
+    }
+  },
+  {
+    "name": "Expenses List",
+    "endpoint": "/api/expenses/AUDIT_BENCHMARK_ROOM",
+    "description": "Fetches 50 expense records sorted by createdAt (Expense.find)",
+    "totalRequests": 2696,
+    "requestsPerSec": 134.81,
+    "avgLatencyMs": 368.2,
+    "p50LatencyMs": 370,
+    "p95LatencyMs": 430,
+    "p99LatencyMs": 450,
+    "minLatencyMs": 54,
+    "maxLatencyMs": 473,
+    "failedRequests": 0,
+    "errorRatePercent": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 2696
+      }
+    }
+  },
+  {
+    "name": "Balances Computation",
+    "endpoint": "/api/expenses/AUDIT_BENCHMARK_ROOM/balances",
+    "description": "Room.findOne + Expense.find + Settlement.find + calculateBalances",
+    "totalRequests": 2805,
+    "requestsPerSec": 140.25,
+    "avgLatencyMs": 354.62,
+    "p50LatencyMs": 351,
+    "p95LatencyMs": 413,
+    "p99LatencyMs": 452,
+    "minLatencyMs": 73,
+    "maxLatencyMs": 724,
+    "failedRequests": 0,
+    "errorRatePercent": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 2805
+      }
+    }
+  },
+  {
+    "name": "Settlements Simplification",
+    "endpoint": "/api/expenses/AUDIT_BENCHMARK_ROOM/settlements",
+    "description": "Room.findOne + Expense.find + Settlement.find + calculateBalances + calculateSettlements",
+    "totalRequests": 2803,
+    "requestsPerSec": 140.15,
+    "avgLatencyMs": 355.67,
+    "p50LatencyMs": 350,
+    "p95LatencyMs": 433,
+    "p99LatencyMs": 445,
+    "minLatencyMs": 89,
+    "maxLatencyMs": 696,
+    "failedRequests": 0,
+    "errorRatePercent": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 2803
+      }
+    }
+  },
+  {
+    "name": "Settlement History",
+    "endpoint": "/api/expenses/AUDIT_BENCHMARK_ROOM/settlements/history",
+    "description": "Room.findOne + Settlement.find({ status: 'PAID' })",
+    "totalRequests": 27549,
+    "requestsPerSec": 1377.45,
+    "avgLatencyMs": 35.85,
+    "p50LatencyMs": 34,
+    "p95LatencyMs": 49,
+    "p99LatencyMs": 59,
+    "minLatencyMs": 28,
+    "maxLatencyMs": 74,
+    "failedRequests": 0,
+    "errorRatePercent": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 27549
+      }
+    }
+  }
+]

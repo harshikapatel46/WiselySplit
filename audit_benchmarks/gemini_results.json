@@ -1,0 +1,197 @@
+{
+  "model": "gemini-3.6-flash",
+  "totalRequests": 20,
+  "successfulRequests": 12,
+  "failedRequests": 8,
+  "avgLatency": 6526.08,
+  "medianLatency": 5757,
+  "minLatency": 4308,
+  "maxLatency": 12595,
+  "p90Latency": 9928,
+  "runs": [
+    {
+      "requestIndex": 1,
+      "scenario": "Weekend Goa Trip",
+      "success": true,
+      "latencyMs": 4910,
+      "summary": "Total group spending is ₹30,900 across 5 transactions.",
+      "topCategory": "Accommodation",
+      "observation": "Accommodation (villa rental) accounts for nearly half (47%) of the total spending.",
+      "suggestion": "Confirm if all group members participated in optional activities like water sports before splitting costs equally."
+    },
+    {
+      "requestIndex": 2,
+      "scenario": "Apartment Monthly Utilities",
+      "success": true,
+      "latencyMs": 4605,
+      "summary": "Total group spending is 9,149 INR across 4 household utility and maintenance items.",
+      "topCategory": "Household Utilities & Services",
+      "observation": "Maid and cleaning service is the highest expense, accounting for roughly 49% of the overall total.",
+      "suggestion": "Consider setting up a recurring monthly budget for essential bills to manage regular household costs efficiently."
+    },
+    {
+      "requestIndex": 3,
+      "scenario": "Office Friday Party",
+      "success": true,
+      "latencyMs": 4308,
+      "summary": "Total group spending is ₹10,570 across food, drinks, and transport.",
+      "topCategory": "Food & Drinks",
+      "observation": "Alcohol and cocktails accounted for over 58% of the total outing cost.",
+      "suggestion": "Look for happy hour deals or set a drinks budget to keep group outing expenses lower."
+    },
+    {
+      "requestIndex": 4,
+      "scenario": "Trek to Western Ghats",
+      "success": true,
+      "latencyMs": 6978,
+      "summary": "Total group spending is ₹12,140 across 4 transactions over two days.",
+      "topCategory": "Transportation",
+      "observation": "Transportation (fuel and toll) accounts for the largest share of the budget at ₹5,600 (around 46%).",
+      "suggestion": "Collect upfront contributions for major fixed costs like transport to streamline group settlements."
+    },
+    {
+      "requestIndex": 5,
+      "scenario": "Grocery & Meal Prep",
+      "success": true,
+      "latencyMs": 4616,
+      "summary": "Total spending across 3 transactions is ₹4,980.",
+      "topCategory": "Groceries & Food Supplies",
+      "observation": "All three purchases occurred within a 90-minute window on October 4, 2026, likely for event or meal preparation.",
+      "suggestion": "Consolidate grocery shopping into a single supermarket trip where possible to simplify expense logging."
+    },
+    {
+      "requestIndex": 6,
+      "scenario": "Movie & Arcade Night",
+      "success": true,
+      "latencyMs": 7284,
+      "summary": "Total group spending is ₹6,400 across 3 entertainment activities.",
+      "topCategory": "Entertainment",
+      "observation": "All expenses occurred during a single evening, with snacks making up over 25% of the total budget.",
+      "suggestion": "Consider pre-booking snack combos or looking for off-peak game discounts to lower outing costs."
+    },
+    {
+      "requestIndex": 7,
+      "scenario": "Road Trip to Pondicherry",
+      "success": false,
+      "latencyMs": 502,
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash, description: Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\\nPlease retry in 27.603631418s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"27s\"}]}}",
+      "statusCode": 429
+    },
+    {
+      "requestIndex": 8,
+      "scenario": "Diwali Celebration Potluck",
+      "success": false,
+      "latencyMs": 629,
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash, description: Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\\nPlease retry in 26.338554522s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"26s\"}]}}",
+      "statusCode": 429
+    },
+    {
+      "requestIndex": 9,
+      "scenario": "Gym & Sports Turf",
+      "success": false,
+      "latencyMs": 511,
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash, description: Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\\nPlease retry in 25.231032436s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.6-flash\",\"location\":\"global\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"25s\"}]}}",
+      "statusCode": 429
+    },
+    {
+      "requestIndex": 10,
+      "scenario": "Sunday Brunch Buffet",
+      "success": false,
+      "latencyMs": 510,
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash, description: Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\\nPlease retry in 24.140597196s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"24s\"}]}}",
+      "statusCode": 429
+    },
+    {
+      "requestIndex": 11,
+      "scenario": "Gaming Console & Setup",
+      "success": false,
+      "latencyMs": 524,
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash, description: Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\\nPlease retry in 22.929961412s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"22s\"}]}}",
+      "statusCode": 429
+    },
+    {
+      "requestIndex": 12,
+      "scenario": "Festival Music Concert",
+      "success": false,
+      "latencyMs": 612,
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash, description: Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\\nPlease retry in 21.765763042s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"21s\"}]}}",
+      "statusCode": 429
+    },
+    {
+      "requestIndex": 13,
+      "scenario": "Home Barbeque Party",
+      "success": false,
+      "latencyMs": 514,
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash, description: Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\\nPlease retry in 20.552338503s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"20s\"}]}}",
+      "statusCode": 429
+    },
+    {
+      "requestIndex": 14,
+      "scenario": "Co-working Space Day Pass",
+      "success": false,
+      "latencyMs": 533,
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash, description: Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\\nPlease retry in 19.464698795s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://ai.google.dev/gemini-api/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"19s\"}]}}",
+      "statusCode": 429
+    },
+    {
+      "requestIndex": 15,
+      "scenario": "Camping by the Lake",
+      "success": true,
+      "latencyMs": 12595,
+      "summary": "Total spending across 3 group expenses is 8,600 INR.",
+      "topCategory": "Outdoor & Gear Rentals",
+      "observation": "Camping equipment rentals (4,200 INR) account for nearly half of the total expenditure.",
+      "suggestion": "Verify if the kayaking activity fee was paid individually or needs to be split based on actual participant count."
+    },
+    {
+      "requestIndex": 16,
+      "scenario": "Birthday Surprise Party",
+      "success": true,
+      "latencyMs": 5968,
+      "summary": "Total group spending is ₹11,100 across 3 party-related expenses.",
+      "topCategory": "Food & Dining",
+      "observation": "The rooftop dinner represents the largest expense, accounting for over 68% of the total budget.",
+      "suggestion": "Consider splitting the costs evenly among attendees while exempting the person celebrating their birthday."
+    },
+    {
+      "requestIndex": 17,
+      "scenario": "Coffee Shop Work Sessions",
+      "success": true,
+      "latencyMs": 5546,
+      "summary": "Total group spending is ₹2,270 across 3 cafe transactions.",
+      "topCategory": "Food & Beverage",
+      "observation": "All expenses are focused on morning coffee and quick breakfast/snack items.",
+      "suggestion": "Consider a weekly budget or coffee subscription to lower recurring cafe costs."
+    },
+    {
+      "requestIndex": 18,
+      "scenario": "Home Deep Cleaning",
+      "success": true,
+      "latencyMs": 5224,
+      "summary": "Total spending is 8,000 INR across 3 home services.",
+      "topCategory": "Home Cleaning & Maintenance",
+      "observation": "All three expenses occurred on October 21, 2026, indicating a comprehensive single-day cleaning drive.",
+      "suggestion": "Consider booking bundled home service packages in the future to save on individual cleaning fees."
+    },
+    {
+      "requestIndex": 19,
+      "scenario": "Amusement Park Day Out",
+      "success": true,
+      "latencyMs": 9928,
+      "summary": "Total spending for the trip is ₹10,900 across 3 expenses.",
+      "topCategory": "Entertainment",
+      "observation": "Entry tickets were the main expense, accounting for over 66% of the total cost.",
+      "suggestion": "Look for online combo packages including tickets and meals to save on future amusement park visits."
+    },
+    {
+      "requestIndex": 20,
+      "scenario": "Diwali Card Night & Snacks",
+      "success": true,
+      "latencyMs": 6351,
+      "summary": "Total group spending is 4,500 INR across 3 purchases on a single evening.",
+      "topCategory": "Food & Dining",
+      "observation": "Food and desserts accounted for approximately 79% (3,550 INR) of the total night's spend.",
+      "suggestion": "Plan snacks and desserts in advance to save on premium late-night food deliveries."
+    }
+  ]
+}
