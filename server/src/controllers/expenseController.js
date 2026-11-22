@@ -192,17 +192,17 @@ const getSettlements = async (req, res) => {
   try {
     const { roomCode } = req.params;
 
-    const room = await Room.findOne({ roomCode });
+    const [room, expenses, paidSettlements] = await Promise.all([
+      Room.findOne({ roomCode }).lean(),
+      Expense.find({ roomCode }).lean(),
+      Settlement.find({ roomCode, status: "PAID" }).lean(),
+    ]);
 
     if (!room) {
       return res.status(404).json({
         message: "Room not found",
       });
     }
-
-    const expenses = await Expense.find({ roomCode });
-
-    const paidSettlements = await Settlement.find({ roomCode, status: "PAID" });
 
     const balances = calculateBalances(expenses, room.members, paidSettlements);
 
