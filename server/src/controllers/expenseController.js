@@ -145,16 +145,34 @@ const getExpenses = async (req, res) => {
   }
 };
 
+// In-flight query coalescing map (Singleflight pattern)
+// De-duplicates concurrent identical database queries for the same roomCode
+const inFlightRoomData = new Map();
+
+const fetchRoomFinancialEntities = (roomCode) => {
+  if (inFlightRoomData.has(roomCode)) {
+    return inFlightRoomData.get(roomCode);
+  }
+
+  const queryPromise = Promise.all([
+    Room.findOne({ roomCode }).lean(),
+    Expense.find({ roomCode }).lean(),
+    Settlement.find({ roomCode, status: "PAID" }).lean(),
+  ]).finally(() => {
+    inFlightRoomData.delete(roomCode);
+  });
+
+  inFlightRoomData.set(roomCode, queryPromise);
+  return queryPromise;
+};
+
 const getBalances = async (req, res) => {
   try {
     const { roomCode } = req.params;
 
-    // Execute database queries in parallel
-    const [room, expenses, paidSettlements] = await Promise.all([
-      Room.findOne({ roomCode }).lean(),
-      Expense.find({ roomCode }).lean(),
-      Settlement.find({ roomCode, status: "PAID" }).lean(),
-    ]);
+    // Execute database queries with in-flight deduplication
+    const [room, expenses, paidSettlements] =
+      await fetchRoomFinancialEntities(roomCode);
 
     if (!room) {
       return res.status(404).json({
@@ -192,11 +210,8 @@ const getSettlements = async (req, res) => {
   try {
     const { roomCode } = req.params;
 
-    const [room, expenses, paidSettlements] = await Promise.all([
-      Room.findOne({ roomCode }).lean(),
-      Expense.find({ roomCode }).lean(),
-      Settlement.find({ roomCode, status: "PAID" }).lean(),
-    ]);
+    const [room, expenses, paidSettlements] =
+      await fetchRoomFinancialEntities(roomCode);
 
     if (!room) {
       return res.status(404).json({
@@ -214,6 +229,47 @@ const getSettlements = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to calculate settlements",
+    });
+  }
+};
+
+const getFinancialSummary = async (req, res) => {
+  try {
+    const { roomCode } = req.params;
+
+    const [room, expenses, paidSettlements] =
+      await fetchRoomFinancialEntities(roomCode);
+
+    if (!room) {
+      return res.status(404).json({
+        message: "Room not found",
+      });
+    }
+
+    const balances = calculateBalances(expenses, room.members, paidSettlements);
+    const settlements = calculateSettlements(balances, room.members);
+
+    const formattedBalances = room.members.map((member) => {
+      const rawBalance = balances[member.memberId] || 0;
+      const rounded = Math.round(rawBalance * 100) / 100;
+      const normalized = Math.abs(rounded) < 0.01 ? 0 : rounded;
+
+      return {
+        memberId: member.memberId,
+        name: member.name,
+        balance: normalized,
+      };
+    });
+
+    res.status(200).json({
+      balances: formattedBalances,
+      settlements,
+    });
+  } catch (error) {
+    console.error("GET FINANCIAL SUMMARY ERROR:", error);
+    res.status(500).json({
+      message: "Failed to calculate financial summary",
+      error: error.message,
     });
   }
 };
@@ -352,6 +408,7 @@ module.exports = {
   getExpenses,
   getBalances,
   getSettlements,
+  getFinancialSummary,
   markSettlementsAsPaid,
   getSettlementHistory,
   getExpenseInsights,

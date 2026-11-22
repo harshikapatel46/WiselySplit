@@ -1,32 +1,42 @@
 import api from "./api";
 
 export async function getRoomData(roomCode) {
-  const [roomResponse, expenseResponse, balanceResponse, settlementResponse] =
-    await Promise.all([
-      api.get(`/rooms/${roomCode}`),
-      api.get(`/expenses/${roomCode}`),
+  try {
+    const response = await api.get(`/rooms/${roomCode}/dashboard`);
+    return response.data;
+  } catch (err) {
+    const [roomResponse, expenseResponse, balanceResponse, settlementResponse] =
+      await Promise.all([
+        api.get(`/rooms/${roomCode}`),
+        api.get(`/expenses/${roomCode}`),
+        api.get(`/expenses/${roomCode}/balances`),
+        api.get(`/expenses/${roomCode}/settlements`),
+      ]);
+
+    return {
+      room: roomResponse.data,
+      expenses: expenseResponse.data,
+      balances: balanceResponse.data,
+      settlements: settlementResponse.data,
+    };
+  }
+}
+
+export async function getFinancialSummary(roomCode) {
+  try {
+    const response = await api.get(`/expenses/${roomCode}/summary`);
+    return response.data;
+  } catch (err) {
+    const [balanceResponse, settlementResponse] = await Promise.all([
       api.get(`/expenses/${roomCode}/balances`),
       api.get(`/expenses/${roomCode}/settlements`),
     ]);
 
-  return {
-    room: roomResponse.data,
-    expenses: expenseResponse.data,
-    balances: balanceResponse.data,
-    settlements: settlementResponse.data,
-  };
-}
-
-export async function getFinancialSummary(roomCode) {
-  const [balanceResponse, settlementResponse] = await Promise.all([
-    api.get(`/expenses/${roomCode}/balances`),
-    api.get(`/expenses/${roomCode}/settlements`),
-  ]);
-
-  return {
-    balances: balanceResponse.data,
-    settlements: settlementResponse.data,
-  };
+    return {
+      balances: balanceResponse.data,
+      settlements: settlementResponse.data,
+    };
+  }
 }
 
 export const joinRoom = (roomCode, name) =>

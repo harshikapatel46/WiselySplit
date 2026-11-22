@@ -1,4 +1,10 @@
 const Room = require("../models/Room");
+const Expense = require("../models/Expense");
+const Settlement = require("../models/Settlement");
+const {
+  calculateBalances,
+  calculateSettlements,
+} = require("../services/settlementService");
 const crypto = require("crypto");
 
 const generateRoomCode = () => {
@@ -92,7 +98,7 @@ const getRoom = async (req, res) => {
     const { roomCode } = req.params;
     const normalizedRoomCode = (roomCode || "").trim().toUpperCase();
 
-    const room = await Room.findOne({ roomCode: normalizedRoomCode });
+    const room = await Room.findOne({ roomCode: normalizedRoomCode }).lean();
 
     if (!room) {
       return res.status(404).json({
@@ -110,8 +116,58 @@ const getRoom = async (req, res) => {
   }
 };
 
+const getRoomDashboard = async (req, res) => {
+  try {
+    const { roomCode } = req.params;
+    const normalizedRoomCode = (roomCode || "").trim().toUpperCase();
+
+    const [room, expenses, paidSettlements] = await Promise.all([
+      Room.findOne({ roomCode: normalizedRoomCode }).lean(),
+      Expense.find({ roomCode: normalizedRoomCode })
+        .sort({ createdAt: -1 })
+        .lean(),
+      Settlement.find({ roomCode: normalizedRoomCode, status: "PAID" }).lean(),
+    ]);
+
+    if (!room) {
+      return res.status(404).json({
+        message: "Room not found",
+      });
+    }
+
+    const balances = calculateBalances(expenses, room.members, paidSettlements);
+    const settlements = calculateSettlements(balances, room.members);
+
+    const formattedBalances = room.members.map((member) => {
+      const rawBalance = balances[member.memberId] || 0;
+      const rounded = Math.round(rawBalance * 100) / 100;
+      const normalized = Math.abs(rounded) < 0.01 ? 0 : rounded;
+
+      return {
+        memberId: member.memberId,
+        name: member.name,
+        balance: normalized,
+      };
+    });
+
+    res.status(200).json({
+      room,
+      expenses,
+      balances: formattedBalances,
+      settlements,
+    });
+  } catch (error) {
+    console.error("GET ROOM DASHBOARD ERROR:", error);
+    res.status(500).json({
+      message: "Failed to fetch room dashboard",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createRoom,
   joinRoom,
   getRoom,
+  getRoomDashboard,
 };

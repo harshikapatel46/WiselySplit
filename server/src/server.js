@@ -13,6 +13,7 @@ const startServer = async () => {
     const server = http.createServer(app);
 
     const io = new Server(server, {
+      transports: ["websocket", "polling"],
       cors: {
         origin: [
           "https://wisely-split-weld.vercel.app",
