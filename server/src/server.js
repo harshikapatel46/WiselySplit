@@ -6,40 +6,50 @@ const PORT = process.env.PORT || 3000;
 
 const connectDB = require("./config/db");
 
-connectDB();
+const startServer = async () => {
+  try {
+    await connectDB();
 
-const server = http.createServer(app);
+    const server = http.createServer(app);
 
-const io = new Server(server, {
-  cors: {
-    origin: ["https://wisely-split-weld.vercel.app", "http://localhost:5173"],
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+    const io = new Server(server, {
+      cors: {
+        origin: [
+          "https://wisely-split-weld.vercel.app",
+          "http://localhost:5173",
+        ],
+        methods: ["GET", "POST"],
+        credentials: true,
+      },
+    });
 
-app.set("io", io);
-io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
+    app.set("io", io);
 
-  socket.on("join-room", (roomCode) => {
-    socket.join(roomCode);
+    io.on("connection", (socket) => {
+      console.log("User connected:", socket.id);
 
-    console.log(`${socket.id} joined room ${roomCode}`);
-    console.log("Current rooms:", [...socket.rooms]);
-  });
+      socket.on("join-room", (roomCode) => {
+        socket.join(roomCode);
+        console.log(`${socket.id} joined room ${roomCode}`);
+      });
 
-  socket.on("leave-room", (roomCode) => {
-    socket.leave(roomCode);
+      socket.on("leave-room", (roomCode) => {
+        socket.leave(roomCode);
+        console.log(`${socket.id} left room ${roomCode}`);
+      });
 
-    console.log(`${socket.id} left room ${roomCode}`);
-  });
+      socket.on("disconnect", () => {
+        console.log("User disconnected:", socket.id);
+      });
+    });
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
+    server.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Server startup failed:", error);
+    process.exit(1);
+  }
+};
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+startServer();

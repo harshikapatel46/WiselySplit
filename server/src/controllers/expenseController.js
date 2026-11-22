@@ -131,7 +131,9 @@ const getExpenses = async (req, res) => {
   try {
     const { roomCode } = req.params;
 
-    const expenses = await Expense.find({ roomCode }).sort({ createdAt: -1 });
+    const expenses = await Expense.find({ roomCode })
+      .sort({ createdAt: -1 })
+      .lean();
 
     res.status(200).json(expenses);
   } catch (error) {
@@ -147,7 +149,12 @@ const getBalances = async (req, res) => {
   try {
     const { roomCode } = req.params;
 
-    const room = await Room.findOne({ roomCode });
+    // Execute database queries in parallel
+    const [room, expenses, paidSettlements] = await Promise.all([
+      Room.findOne({ roomCode }).lean(),
+      Expense.find({ roomCode }).lean(),
+      Settlement.find({ roomCode, status: "PAID" }).lean(),
+    ]);
 
     if (!room) {
       return res.status(404).json({
@@ -155,16 +162,14 @@ const getBalances = async (req, res) => {
       });
     }
 
-    const expenses = await Expense.find({ roomCode });
-
-    const paidSettlements = await Settlement.find({ roomCode, status: "PAID" });
-
+    // Calculate balances
     const balances = calculateBalances(expenses, room.members, paidSettlements);
 
     const result = room.members.map((member) => {
       const rawBalance = balances[member.memberId] || 0;
       const rounded = Math.round(rawBalance * 100) / 100;
       const normalized = Math.abs(rounded) < 0.01 ? 0 : rounded;
+
       return {
         memberId: member.memberId,
         name: member.name,
@@ -182,6 +187,7 @@ const getBalances = async (req, res) => {
     });
   }
 };
+
 const getSettlements = async (req, res) => {
   try {
     const { roomCode } = req.params;
@@ -348,5 +354,5 @@ module.exports = {
   getSettlements,
   markSettlementsAsPaid,
   getSettlementHistory,
-   getExpenseInsights,
+  getExpenseInsights,
 };
